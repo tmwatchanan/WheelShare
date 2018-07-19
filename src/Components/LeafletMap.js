@@ -9,17 +9,7 @@ class LeafletMap extends Component {
         };
     }
 
-    // updateDimensions() {
-    //     const height = window.innerHeight
-    //     this.setState({ height: height })
-    // }
-
-    // componentWillMount() {
-    //     this.updateDimensions()
-    // }
-
     componentDidMount() {
-        // window.addEventListener("resize", this.updateDimensions.bind(this))
         // create map
         this.map = Leaflet.map('map', {
             fullscreenControl: true,
@@ -33,10 +23,6 @@ class LeafletMap extends Component {
             ]
         });
     }
-
-    // componentWillUnmount() {
-    //     window.removeEventListener("resize", this.updateDimensions.bind(this))
-    // }
 
     render() {
         return <div id="map"></div>
