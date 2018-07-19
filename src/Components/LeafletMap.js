@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Leaflet from 'leaflet'
-// import './LeafletMap.css'
+import './LeafletMap.css'
 
 class LeafletMap extends Component {
     constructor(props) {
@@ -9,17 +9,17 @@ class LeafletMap extends Component {
         };
     }
 
-    updateDimensions() {
-        const height = window.innerHeight
-        this.setState({ height: height })
-    }
+    // updateDimensions() {
+    //     const height = window.innerHeight
+    //     this.setState({ height: height })
+    // }
 
-    componentWillMount() {
-        this.updateDimensions()
-    }
+    // componentWillMount() {
+    //     this.updateDimensions()
+    // }
 
     componentDidMount() {
-        window.addEventListener("resize", this.updateDimensions.bind(this))
+        // window.addEventListener("resize", this.updateDimensions.bind(this))
         // create map
         this.map = Leaflet.map('map', {
             fullscreenControl: true,
@@ -34,12 +34,12 @@ class LeafletMap extends Component {
         });
     }
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions.bind(this))
-    }
+    // componentWillUnmount() {
+    //     window.removeEventListener("resize", this.updateDimensions.bind(this))
+    // }
 
     render() {
-        return <div id="map" style={{ height: this.state.height }}></div>
+        return <div id="map"></div>
     }
 }
 
