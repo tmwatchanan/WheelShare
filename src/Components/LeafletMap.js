@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Leaflet from 'leaflet'
+import "leaflet/dist/leaflet.css"
 import './LeafletMap.css'
 
 class LeafletMap extends Component {
@@ -22,6 +23,8 @@ class LeafletMap extends Component {
                 }),
             ]
         });
+
+        // FetchAllFromAPI()
     }
 
     render() {
@@ -30,3 +33,10 @@ class LeafletMap extends Component {
 }
 
 export default LeafletMap
+
+// function FetchAllFromAPI() {
+//     fetch('https://polar-scrubland-80686.herokuapp.com/api/all')
+//         .then(response => response.json())
+//         .then(json => console.log(json))
+//         .catch(error => console.error(error))
+// }
