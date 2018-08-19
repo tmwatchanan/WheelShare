@@ -8,7 +8,12 @@ class LeafletMap extends Component {
         super(props)
         this.state = {
             mapData: {},
-            pathGeoJSON: {}
+            pathGeoJSON: {},
+            verticeGeoJSON: {},
+            userPath: {
+                start: {},
+                end: {}
+            }
         }
     }
 
@@ -39,6 +44,7 @@ class LeafletMap extends Component {
                     }
                 )
                 this.convertPathsToGeoJSON()
+                this.convertVerticesToGeoJSON()
                 this.drawDataOnMap()
                 console.log(this.state.mapData)
             })
@@ -72,10 +78,34 @@ class LeafletMap extends Component {
         )
     }
 
+    convertVerticesToGeoJSON() {
+        let verticeGeoJSON = {
+            'type': 'FeatureCollection',
+            'features': []
+        }
+        this.state.mapData.vertices.forEach(point => {
+            let verticeFeature = {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [point.lng, point.lat]
+                },
+                'properties': {
+                    'id': point.id
+                }
+            }
+            verticeGeoJSON.features.push(verticeFeature)
+        })
+        this.setState(
+            {
+                verticeGeoJSON: verticeGeoJSON
+            }
+        )
+    }
+
     drawDataOnMap() {
         this.drawPaths()
         this.drawCircles()
-
     }
 
     drawPaths() {
@@ -107,16 +137,45 @@ class LeafletMap extends Component {
     }
 
     drawCircles() {
-        this.state.mapData.vertices.forEach(vertex => {
-            let drawCircle = new Leaflet.Circle([vertex.lat, vertex.lng], {
-                radius: 1.2,
-                color: 'black'
-            })
-            drawCircle.addTo(this.map).on("click", (e) => {
-                let clickedCircle = e.target
-                clickedCircle.bindPopup("Hi").openPopup()
-            })
-        })
+        let markerOptions = {
+            weight: 1,
+            opacity: 1,
+            radius: 5,
+            color: 'black',
+            fillColor: 'black',
+            fillOpacity: 0.8
+        }
+        var geoJSONOptions = {
+            pointToLayer: function (feature, latlng) {
+                return Leaflet.circleMarker(latlng, markerOptions)
+            },
+            onEachFeature: function (feature, layer) {
+                if (feature.properties) {
+                    // layer.bindPopup(feature.properties.id)
+                    layer.bindPopup(String(feature.properties.id))
+                }
+            }
+
+        }
+        var controlLayers = Leaflet.control.layers().addTo(this.map)
+        let geoJSONLayer = Leaflet.geoJSON(this.state.verticeGeoJSON, geoJSONOptions).addTo(this.map)
+        controlLayers.addOverlay(geoJSONLayer, "Wheelchair Vertices")
+        // geoJSONLayer.addEventListener('click dblclick', function (e) {
+        //     // alert(e.layer.feature.properties.safety)
+        //     alert('Circle')
+        // })
+
+
+        // this.state.mapData.vertices.forEach(vertex => {
+        //     let drawCircle = new Leaflet.Circle([vertex.lat, vertex.lng], {
+        //         radius: 1.2,
+        //         color: 'black'
+        //     })
+        //     drawCircle.addTo(this.map).on("click", (e) => {
+        //         let clickedCircle = e.target
+        //         clickedCircle.bindPopup("Hi").openPopup()
+        //     })
+        // })
     }
 
     render() {
