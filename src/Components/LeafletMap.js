@@ -80,7 +80,7 @@ class LeafletMap extends Component {
 
     drawPaths() {
         let getPathColorFromSafety = function (safety) {
-            switch (safety) {
+            switch (Math.round(safety)) {
                 case 1:
                     return '#d94b38'//'red'
                 case 2:
